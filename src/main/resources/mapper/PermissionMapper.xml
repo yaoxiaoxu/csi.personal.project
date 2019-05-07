@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaoxx.business.permission.dao.PermissionMapper">
+  <resultMap id="BaseResultMap" type="com.yaoxx.entity.Permission">
+    <id column="c_id" jdbcType="BIGINT" property="id" />
+    <result column="c_type" jdbcType="INTEGER" property="type" />
+    <result column="c_name" jdbcType="VARCHAR" property="name" />
+    <result column="c_icon" jdbcType="VARCHAR" property="icon" />
+    <result column="c_pid" jdbcType="BIGINT" property="pid" />
+    <result column="c_url" jdbcType="VARCHAR" property="url" />
+    <result column="c_code" jdbcType="VARCHAR" property="code" />
+    <result column="c_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="c_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="c_create_user" jdbcType="BIGINT" property="createUser" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_permission
+    where c_id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yaoxx.entity.Permission">
+    insert into t_permission (c_id, c_type, c_name, 
+      c_icon, c_pid, c_url, c_code, 
+      c_create_time, c_update_time, c_create_user
+      )
+    values (#{id,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{pid,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yaoxx.entity.Permission">
+    update t_permission
+    set c_type = #{type,jdbcType=INTEGER},
+      c_name = #{name,jdbcType=VARCHAR},
+      c_icon = #{icon,jdbcType=VARCHAR},
+      c_pid = #{pid,jdbcType=BIGINT},
+      c_url = #{url,jdbcType=VARCHAR},
+      c_code = #{code,jdbcType=VARCHAR},
+      c_create_time = #{createTime,jdbcType=TIMESTAMP},
+      c_update_time = #{updateTime,jdbcType=TIMESTAMP},
+      c_create_user = #{createUser,jdbcType=BIGINT}
+    where c_id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select c_id, c_type, c_name, c_icon, c_pid, c_url, c_code, c_create_time, c_update_time, 
+    c_create_user
+    from t_permission
+    where c_id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select c_id, c_type, c_name, c_icon, c_pid, c_url, c_code, c_create_time, c_update_time, 
+    c_create_user
+    from t_permission
+  </select>
+  <!-- *********************************************************************************** -->
+  <!-- ************************************ 递归查询菜单 ********************************* -->
+  <!-- *********************************************************************************** -->
+  <resultMap id="MenuResultMap" type="com.yaoxx.entity.Permission">
+    <id column="c_id" jdbcType="BIGINT" property="id" />
+    <result column="c_type" jdbcType="INTEGER" property="type" />
+    <result column="c_name" jdbcType="VARCHAR" property="name" />
+    <result column="c_icon" jdbcType="VARCHAR" property="icon" />
+    <result column="c_pid" jdbcType="BIGINT" property="pid" />
+    <result column="c_url" jdbcType="VARCHAR" property="url" />
+    <result column="c_code" jdbcType="VARCHAR" property="code" />
+    <result column="c_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="c_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="c_create_user" jdbcType="BIGINT" property="createUser" />
+    <!--		 property: 指的是集合属性的值(类中的),
+		     	 ofType：指的是集合中元素的类型, 
+		     	 column: 指的是根据本条数据的哪一列查询
+		     	 fetchType="lazy" 懒加载（使用时才查询） -->
+    <collection  property="childs" 
+    			 ofType="com.yaoxx.entity.Permission"
+    			 column="c_id"
+    			 select="com.yaoxx.business.permission.dao.PermissionMapper.selectByPid" /> 
+  </resultMap>
+   <select id="selectMenu" parameterType="int"  resultMap="MenuResultMap">
+    select *
+    from t_permission
+    where 1=1
+    <if test="type !=null">
+    	and c_type = #{type,jdbcType=INTEGER}
+    </if>
+    <if test="pid !=null">
+   		and c_pid = #{pid,jdbcType=BIGINT}
+    </if>
+  </select>
+  <select id="selectByPid" parameterType="java.lang.Long" resultMap="MenuResultMap">
+  	select * 
+  	from t_permission
+  	where c_pid = #{pid,jdbcType=BIGINT}
+  </select>
+  <!-- *********************************************************************************** -->
+  <!-- ************************************** /查询菜单 *********************************** -->
+  <!-- *********************************************************************************** -->
+</mapper>

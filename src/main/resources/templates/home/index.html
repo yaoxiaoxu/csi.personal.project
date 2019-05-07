@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+  <input type="text" th:value="${ctx}" />
+</body>
+<script th:inline="javascript">
+	console.log("------------------------------")
+	console.log([[${ctx}]])
+	console.log("------------------------------")
+
+</script>
+</html>

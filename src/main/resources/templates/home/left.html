@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+  <aside class="main-sidebar" th:fragment="left">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+      <!-- 查询表单 -->
+      <form action="#" method="get" class="sidebar-form">
+        <div class="input-group">
+          <input type="text" name="q" class="form-control" placeholder="Search...">
+          <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+        </div>
+      </form>
+      <!-- /.查询表单 -->
+      
+      <!-- 侧边栏菜单: : style can be found in sidebar.less -->
+      <ul class="sidebar-menu" data-widget="tree">
+      	<li class="header">PERSONAL INFO MENU</li><!-- 菜单所属项目 -->
+<!--     	<th:block th:replace="home/command :: createMenu(${menus})"></th:block> -->
+      		<th:block th:each="menu : ${menus}" th:fragment="createMenu(menus)">
+	      	<li class="treeview" th:if="${not #lists.isEmpty(menu.childs)}" >
+	      		<a th:href="${menu.url}">
+		      		<i th:class="${menu.icon}"></i> 							<!-- 图标 -->
+		      		<span th:text="${menu.name}"></span>						<!-- 菜单名称 -->
+		      		<span class="pull-right-container">							<!-- 右侧 -->
+		      			<span class="label label-primary pull-right"
+		      				 th:if="${menu.infoNum !=null && menu.infoNum>0}"
+		      				 th:text="${menu.infoNum}"></span>					<!-- 消息数量  -->
+		      			<i class="fa fa-angle-left pull-right"
+		      				 th:if="#{*lists.isEmpty(menu.childs)}"></i> 		<!-- 可下拉提示 -->
+	            	</span>
+	      		</a>
+	      		<!-- 下拉内容 -->
+	      		<ul class="treeview-menu" th:insert=":: createMenu(${menu.childs})"></ul>
+	          	<!-- /下拉内容 -->
+	      	</li>
+	      	<li th:if="${#lists.isEmpty(menu.childs)}">
+	          <a th:href="${menu.url}">
+	            <i th:class="${menu.icon}"></i> 
+            	<span th:text="${menu.name}"></span>
+	            <span class="pull-right-container">
+	            	<span class="label label-primary pull-right"
+		      				 th:if="${menu.infoNum !=null && menu.infoNum>0}"
+		      				 th:text="${menu.infoNum}"></span>					<!-- 消息数量  -->
+	            </span>
+	          </a>
+	        </li>
+      	</th:block>
+      </ul>
+      <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">PERSONAL INFO MENU</li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-share"></i> <span>Multilevel</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="treeview">
+              <a href="#"><i class="fa fa-circle-o"></i> Level One
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+              </a>
+              <ul class="treeview-menu">
+                <li><a href="#"><i class="fa fa-circle-o"></i> Level Two</a></li>
+                <li class="treeview">
+                  <a href="#"><i class="fa fa-circle-o"></i> Level Two
+                    <span class="pull-right-container">
+                      <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                  </a>
+                  <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                    <li><a href="#"><i class="fa fa-circle-o"></i> Level Three</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
+          </ul>
+        </li>
+        <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+        <li class="header">LABELS</li>
+        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
+      </ul>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+</body>
+</html>
