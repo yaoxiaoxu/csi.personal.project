@@ -18,5 +18,11 @@ public class TestController {
 	public List<String> ribbonTest(){
 		return testService.getName();
 	}
+	
+	@RequestMapping("/test2")
+	@ResponseBody
+	public List<String> feignTest(){
+		return testService.getName();
+	}
 
 }
